@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>طلب حذف الحساب - سفراء الولاية</title>
+  <style>
+    body { font-family: sans-serif; direction: rtl; padding: 20px; background: #f9f9f9; }
+    form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    input, textarea, button { width: 100%; margin-top: 10px; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>طلب حذف الحساب</h1>
+  <p>يرجى ملء النموذج أدناه لحذف حسابك من تطبيق "سفراء الولاية". سنقوم بمعالجة الطلب خلال 7 أيام.</p>
+  <form id="deleteForm">
+    <label>البريد الإلكتروني المستخدم في التطبيق:</label>
+    <input type="email" id="email" required>
+    <label>سبب الحذف (اختياري):</label>
+    <textarea id="reason"></textarea>
+    <button type="submit">إرسال الطلب</button>
+  </form>
+  <p id="result"></p>
+  <script>
+    document.getElementById('deleteForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const reason = document.getElementById('reason').value;
+      const res = await fetch("https://safara-account-delete.vercel.app/api/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, reason })
+      });
+      document.getElementById('result').textContent =
+        res.ok
+          ? "تم إرسال الطلب بنجاح."
+          : "حدث خطأ. حاول مرة أخرى.";
+    });
+  </script>
+</body>
+</html>
