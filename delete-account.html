@@ -4,37 +4,116 @@
   <meta charset="UTF-8">
   <title>طلب حذف الحساب - سفراء الولاية</title>
   <style>
-    body { font-family: sans-serif; direction: rtl; padding: 20px; background: #f9f9f9; }
-    form { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
-    input, textarea, button { width: 100%; margin-top: 10px; padding: 10px; border-radius: 5px; }
+    /* Reset بسيط */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      direction: rtl;
+      background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    header {
+      background: #000dff;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #000dff;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #1a1aff;
+    }
+    #result {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h1>طلب حذف الحساب</h1>
-  <p>يرجى ملء النموذج أدناه لحذف حسابك من تطبيق "سفراء الولاية". سنقوم بمعالجة الطلب خلال 7 أيام.</p>
-  <form id="deleteForm">
-    <label>البريد الإلكتروني المستخدم في التطبيق:</label>
-    <input type="email" id="email" required>
-    <label>سبب الحذف (اختياري):</label>
-    <textarea id="reason"></textarea>
-    <button type="submit">إرسال الطلب</button>
-  </form>
-  <p id="result"></p>
+
+  <div class="container">
+    <header>
+      <h1>حذف الحساب</h1>
+    </header>
+    <main>
+      <p>يرجى إدخال اسم المستخدم ورقم هاتفك لطلب حذف الحساب.</p>
+      <form id="deleteForm">
+        <label for="username">اسم المستخدم:</label>
+        <input type="text" id="username" name="username" placeholder="مثلاً: ahmed123" required>
+
+        <label for="phone">رقم الهاتف:</label>
+        <input type="tel" id="phone" name="phone" placeholder="مثلاً: 07701234567" required>
+
+        <button type="submit">إرسال الطلب</button>
+      </form>
+      <p id="result"></p>
+    </main>
+  </div>
+
   <script>
     document.getElementById('deleteForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const reason = document.getElementById('reason').value;
-      const res = await fetch("https://safara-account-delete.vercel.app/api/delete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, reason })
-      });
-      document.getElementById('result').textContent =
-        res.ok
-          ? "تم إرسال الطلب بنجاح."
-          : "حدث خطأ. حاول مرة أخرى.";
+      const username = document.getElementById('username').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      document.getElementById('result').textContent = '... جاري الإرسال';
+
+      try {
+        const res = await fetch("/api/delete", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, phone })
+        });
+        if (res.ok) {
+          document.getElementById('result').textContent = "تم إرسال الطلب بنجاح! سنتواصل معك قريبًا.";
+        } else {
+          throw new Error();
+        }
+      } catch {
+        document.getElementById('result').textContent = "حدث خطأ أثناء الإرسال، حاول مرة أخرى.";
+      }
     });
   </script>
+
 </body>
 </html>
