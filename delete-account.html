@@ -2,70 +2,229 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>طلب حذف الحساب - سفراء الولاية</title>
   <style>
-    /* Reset بسيط */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Reset وتنسيقات أساسية */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    :root {
+      --primary-color: #3b5fe2;
+      --primary-dark: #2a4bcc;
+      --primary-light: #eef2ff;
+      --accent-color: #6366f1;
+      --text-color: #333;
+      --text-light: #666;
+      --bg-color: #f5f7ff;
+      --white: #ffffff;
+      --shadow: 0 10px 30px rgba(59, 95, 226, 0.15);
+      --border-radius: 12px;
+    }
+    
     body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       direction: rtl;
-      background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
-      color: #333;
+      background: var(--bg-color);
+      color: var(--text-color);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
+      line-height: 1.6;
     }
+    
     .container {
-      background: #fff;
+      background: var(--white);
       width: 100%;
-      max-width: 400px;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      max-width: 450px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(59, 95, 226, 0.2);
+    }
+    
+    header {
+      background: var(--primary-color);
+      color: var(--white);
+      padding: 30px 20px;
+      text-align: center;
+      position: relative;
       overflow: hidden;
     }
-    header {
-      background: #000dff;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--accent-color) 0%, transparent 50%);
+      opacity: 0.1;
+      z-index: 0;
     }
+    
+    header h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    header p {
+      position: relative;
+      z-index: 1;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
     main {
-      padding: 20px;
+      padding: 30px;
     }
+    
+    .form-intro {
+      margin-bottom: 25px;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-color);
     }
+    
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 12px 15px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
       font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: #f8fafc;
     }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(59, 95, 226, 0.1);
+      background-color: var(--white);
+    }
+    
+    input::placeholder {
+      color: #a0aec0;
+    }
+    
     button {
       width: 100%;
-      margin-top: 20px;
-      padding: 12px;
+      padding: 14px;
       font-size: 1rem;
+      font-weight: 600;
       border: none;
-      border-radius: 4px;
-      background: #000dff;
-      color: #fff;
+      border-radius: 8px;
+      background: var(--primary-color);
+      color: var(--white);
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
+    
     button:hover {
-      background: #1a1aff;
+      background: var(--primary-dark);
     }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+    
+    button:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(100, 100);
+        opacity: 0;
+      }
+    }
+    
     #result {
-      margin-top: 15px;
+      margin-top: 20px;
       text-align: center;
-      font-weight: bold;
+      font-weight: 600;
+      padding: 10px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .success {
+      background-color: #e6fffa;
+      color: #047857;
+    }
+    
+    .error {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    
+    .loading {
+      background-color: #f3f4f6;
+      color: #4b5563;
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%;
+      }
+      
+      header {
+        padding: 25px 15px;
+      }
+      
+      main {
+        padding: 20px;
+      }
+      
+      header h1 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -74,19 +233,38 @@
   <div class="container">
     <header>
       <h1>حذف الحساب</h1>
+      <p>سفراء الولاية</p>
     </header>
     <main>
-      <p>يرجى إدخال اسم المستخدم ورقم هاتفك لطلب حذف الحساب.</p>
+      <p class="form-intro">يرجى إدخال اسم المستخدم ورقم هاتفك لطلب حذف الحساب. سيتم مراجعة طلبك والتواصل معك قريبًا.</p>
+      
       <form id="deleteForm">
-        <label for="username">اسم المستخدم:</label>
-        <input type="text" id="username" name="username" placeholder="مثلاً: ahmed123" required>
+        <div class="form-group">
+          <label for="username">اسم المستخدم:</label>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            placeholder="مثلاً: احمد محمد علي" 
+            required
+          >
+        </div>
 
-        <label for="phone">رقم الهاتف:</label>
-        <input type="tel" id="phone" name="phone" placeholder="مثلاً: 07701234567" required>
+        <div class="form-group">
+          <label for="phone">رقم الهاتف:</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            placeholder="مثلاً: 07701234567" 
+            required
+          >
+        </div>
 
         <button type="submit">إرسال الطلب</button>
       </form>
-      <p id="result"></p>
+      
+      <div id="result"></div>
     </main>
   </div>
 
@@ -95,8 +273,11 @@
       e.preventDefault();
       const username = document.getElementById('username').value.trim();
       const phone = document.getElementById('phone').value.trim();
-
-      document.getElementById('result').textContent = '... جاري الإرسال';
+      const resultElement = document.getElementById('result');
+      
+      // إظهار حالة التحميل
+      resultElement.textContent = 'جاري إرسال الطلب...';
+      resultElement.className = 'loading';
 
       try {
         const res = await fetch("/api/delete", {
@@ -104,13 +285,18 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, phone })
         });
+        
         if (res.ok) {
-          document.getElementById('result').textContent = "تم إرسال الطلب بنجاح! سنتواصل معك قريبًا.";
+          resultElement.textContent = "تم إرسال الطلب بنجاح! سنتواصل معك قريبًا.";
+          resultElement.className = 'success';
+          // مسح النموذج بعد النجاح
+          document.getElementById('deleteForm').reset();
         } else {
           throw new Error();
         }
-      } catch {
-        document.getElementById('result').textContent = "حدث خطأ أثناء الإرسال، حاول مرة أخرى.";
+      } catch (error) {
+        resultElement.textContent = "حدث خطأ أثناء الإرسال، يرجى المحاولة مرة أخرى.";
+        resultElement.className = 'error';
       }
     });
   </script>
